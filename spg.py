@@ -29,6 +29,13 @@ def conectarFunc():
     while connect == True:
         if contador == 50:
             raise Exception("Erro ao tentar realizar o login")
+        if procurarImagemSemRetornarErro("close"):
+            contador = 0
+            connect = True
+            assinarClick = False
+            playClick = False
+            connectWallet = False
+            reiniciarAPagina()
         if connectWallet == False and procurarImagemSemRetornarErro("connectWallet"):
             pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("connectWallet"), duration = durationChoosed())
             connectWallet = True
@@ -59,6 +66,8 @@ def dragInTheMenu1x():
 
 def procurarImagemSemRetornarErro(imagem):
     confidence = os.getenv("CONFIDENCE")
+    if imagem == "15de15":
+        confidence = 0.9
     img = None
     contador = 0
     if (imagem == "metamaskNotification"):
@@ -95,10 +104,13 @@ def procurarLocalizacaoDaImagemPelosEixos(imagem):
     print('*' + '-' * 100 + '*')
     return None, None
 
+
+#### ERRO SÓ DAQUI PRA BAIXO ####
+
 # Procura pela região em torno do botão fight se essa nave deve ou não ir batalhar
 def fight():
     print('*' + '-' * 100 + '*')
-    print('Utiliando a func FIGHT')
+    print('Utiliando a função FIGHT')
     loop = True
     contador = 0
     while loop:
@@ -116,41 +128,42 @@ def fight():
                     contador += 1
                     if contador >= 30:
                         loop = False
+                        return False
             # except:
             #     print("Erro na func fight, ao procurar imagem: FIGHT")   
         else:
             loop = False
     print('*' + '-' * 100 + '*')
-
+    return True
+    
+# 100%
 def fightBoss():
-    confirmMap()
     time.sleep(2)
+    confirmMap()
     if procurarImagemSemRetornarErro("fightBoss"):
         pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("fightBoss"), duration = durationChoosed())
 
-def confirmLose():
-    confirmMap()
-    time.sleep(5)
-    if procurarImagemSemRetornarErro("confirmLose"):
-        pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("confirmLose"), duration = durationChoosed())
-        pyautogui.moveTo(100, 100)
-
+# 100%
 def confirmMap():
+    time.sleep(1)
     if procurarImagemSemRetornarErro("confirmDentroDoJogo"):
         pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("confirmDentroDoJogo"), duration = durationChoosed())
-    if procurarImagemSemRetornarErro("confirmLose"):
+    elif procurarImagemSemRetornarErro("confirmLose"):
         pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("confirmLose"), duration = durationChoosed())
 
 def backToMenu():
+    time.sleep(5)
     confirmMap()
     if procurarImagemSemRetornarErro("ship"):
         pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("ship"), duration = durationChoosed())
 
+# 100%
 def clickInTheXOfShips():
     confirmMap()
     if procurarImagemSemRetornarErro("xShips"):
         pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("xShips"), duration = durationChoosed())
 
+# 100%
 def findShipByTheRegion():
     print('Utiliando a func findShipByTheRegion')
     contador = 0
@@ -159,13 +172,13 @@ def findShipByTheRegion():
     while not loopSurrender:
         confirmMap()
         contador += 1
-        print("Esperando aparecer a imagme: surrenderInTheGame!")
+        loopSurrender = procurarImagemSemRetornarErro("surrenderInTheGame")
         if contador == 20:
             loopSurrender = True
 
     if procurarImagemSemRetornarErro("surrenderInTheGame"):
         try:
-            x, y = pyautogui.locateCenterOnScreen('./assets/surrenderInTheGame.png', confidence=0.95)
+            x, y = pyautogui.locateCenterOnScreen('./assets/surrenderInTheGame.png', confidence=0.9)
             variacaoDoY = 57
             newY = y
             retorno = []
@@ -174,7 +187,7 @@ def findShipByTheRegion():
             timeDeSaida = datetime.datetime.utcnow()
             while loopOfWhile:
                 for i in range(6):
-                    img = pyautogui.locateOnScreen('./assets/xVermelhoEmCimaDaNave.png', confidence=0.95, region=(x-30,(newY+49+variacaoDoY), 56,50) )
+                    img = pyautogui.locateCenterOnScreen('./assets/xVermelhoEmCimaDaNave.png', confidence=0.9, region=(x-30,(newY+49+variacaoDoY), 56, 60) )
                     newY+= 57  
                     if img == None:  
                         retorno.append(False)
@@ -193,14 +206,17 @@ def findShipByTheRegion():
                 newY = y
                 confirmMap()
             return True
-        except:
-            print("Erro na func: findShipByTheRegion")
+        except BaseException as err:
+            print("Ocorreu um ERRO na função - findShipByTheRegion: " + str(err))
+            
     return False
 
 def clickInTheXOfShipsLoop():
+    time.sleep(2)
     while procurarImagemSemRetornarErro("processing"):
         time.sleep(1)
         print("Esperando carregamento!")
+    time.sleep(2)
     x = procurarImagemSemRetornarErro("xShips")
     while x:
         clickInTheXOfShips()
@@ -208,32 +224,47 @@ def clickInTheXOfShipsLoop():
 
 def maxAmmo():
     confirmMap()
-    time.sleep(5)
-    if procurarImagemSemRetornarErro("setaDeEscolha"):
-        pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("setaDeEscolha"), duration = durationChoosed())
-    if procurarImagemSemRetornarErro("maxAmmo"):
-        pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("maxAmmo"), duration = durationChoosed())
+    contador = 0
+    setaDeEscolha = False
+    while setaDeEscolha == False:
+        time.sleep(1)
+        setaDeEscolha = procurarImagemSemRetornarErro("setaDeEscolha")
+        if setaDeEscolha:
+            pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("setaDeEscolha"), duration = durationChoosed())
+            time.sleep(2)
+            if procurarImagemSemRetornarErro("maxAmmo"):
+                pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("maxAmmo"), duration = durationChoosed())
+        else:
+            contador += 1
+            if contador == 30:
+                raise Exception("Erro na função maxAmmo")
 
 def start():
-    for i in range(4):
+    fightFinish = True
+    while fightFinish:
+        clickInTheXOfShipsLoop()
         maxAmmo()
-        fight()
+        fightFinish = fight()
         fightBoss()
-        confirmLose()
+        confirmMap()
         findShipByTheRegion()
         backToMenu()
-        clickInTheXOfShipsLoop()
-    time.sleep(1200)
+    for i in range(600):
+        moveRange = round(random.uniform(100,700), 10)
+        moveRange2 = round(random.uniform(100,700), 10)
+        pyautogui.moveTo(moveRange, moveRange2m, duration = 2)
 
-conectarFuncBool = True
+# conectarFuncBool = True
 time.sleep(2)
 while True:
-    # try:
-        if conectarFuncBool == True :
-            conectarFunc()
-            conectarFuncBool = False
+    try:
+        
+        # if conectarFuncBool == True :
+            # conectarFunc()
+            # conectarFuncBool = False
+        conectarFunc()
         start()
 
-    # except BaseException as err:
-    #     print("Ocorreu um ERRO: " + str(err))
-    #     conectarFuncBool = True
+    except BaseException as err:
+        print("Ocorreu um ERRO: " + str(err))
+        conectarFuncBool = True
