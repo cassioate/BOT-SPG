@@ -1,0 +1,11 @@
+#Valor de confiança que o python deve reconhecer a imagem
+CONFIDENCE=0.9
+#Esse é o valor base da movimentação do mouse, no codigo ele será acrescido de um valor random.
+DURATION=2.5
+
+#Modificar range de Aleatoriedade do click nos botões gerais
+RandomVarEixoX=80
+RandomVarEixoY=40
+
+#Modificar range de Aleatoriedade do click nos botões de seleção dos guerreiros
+RandomVarSelectTriple=66
