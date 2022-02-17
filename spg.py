@@ -147,9 +147,18 @@ def fightBoss():
 def confirmMap():
     time.sleep(1)
     if procurarImagemSemRetornarErro("confirmDentroDoJogo"):
-        pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("confirmDentroDoJogo"), duration = durationChoosed())
+        while procurarImagemSemRetornarErro("confirmDentroDoJogo"):
+            try:
+                pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("confirmDentroDoJogo"), duration = durationChoosed())
+            except:
+                print("Falhou em encontrar a imagem 'confirmDentroDojogo', mesmo após ter achado na fase anterior")
     elif procurarImagemSemRetornarErro("confirmLose"):
-        pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("confirmLose"), duration = durationChoosed())
+        while procurarImagemSemRetornarErro("confirmLose"):
+            try:
+                pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("confirmLose"), duration = durationChoosed())
+            except:
+                print("Falhou em encontrar a imagem 'confirmLose', mesmo após ter achado na fase anterior")
+            
 
 def backToMenu():
     time.sleep(5)
