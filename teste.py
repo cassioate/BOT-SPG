@@ -68,7 +68,7 @@ def procurarLocalizacaoDaImagemPelosEixos(imagem):
     print('Utiliando a func procurarLocalizacaoDaImagemPelosEixos: ' + imagem)
     print('*' + '-' * 100 + '*')
     contador = 0
-    while contador < 25:
+    while contador < 5:
         if procurarImagemSemRetornarErro(imagem):
             confidence = os.getenv("CONFIDENCE")
             try:
@@ -85,6 +85,10 @@ def procurarLocalizacaoDaImagemPelosEixos(imagem):
              contador += 1
     print('*' + '-' * 100 + '*')
     return None, None
+
+x,y = procurarLocalizacaoDaImagemPelosEixos("confirmDentroDoJogo")
+if x != None:
+    pyautogui.click(x, y, duration = 1)
 
 def confirmMap():
     if procurarImagemSemRetornarErro("confirmDentroDoJogo"):

@@ -80,14 +80,13 @@ def procurarImagemSemRetornarErro(imagem):
         contador += 1
         if contador >= 5:
             img = True
-    print('Não consegui encontrar a imagem: ' + imagem)
     return False
 
 def procurarLocalizacaoDaImagemPelosEixos(imagem):
     print('Utiliando a func procurarLocalizacaoDaImagemPelosEixos: ' + imagem)
     print('*' + '-' * 100 + '*')
     contador = 0
-    while contador < 25:
+    while contador < 35:
         if procurarImagemSemRetornarErro(imagem):
             confidence = os.getenv("CONFIDENCE")
             try:
@@ -98,7 +97,7 @@ def procurarLocalizacaoDaImagemPelosEixos(imagem):
                 else:
                     print('Erro na func procurarLocalizacaoDaImagemPelosEixos')
             except:
-                raise("Nao achei a imagem: "+ imagem)         
+                print("ERRO - FUNÇÃO: procurarLocalizacaoDaImagemPelosEixos - Nao achei a imagem: "+imagem+' - '+ str(contador))         
         else:
              contador += 1
     print('*' + '-' * 100 + '*')
@@ -147,24 +146,48 @@ def fightBoss():
 def confirmMap():
     time.sleep(1)
     if procurarImagemSemRetornarErro("confirmDentroDoJogo"):
-        while procurarImagemSemRetornarErro("confirmDentroDoJogo"):
-            try:
-                pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("confirmDentroDoJogo"), duration = durationChoosed())
-            except:
-                print("Falhou em encontrar a imagem 'confirmDentroDojogo', mesmo após ter achado na fase anterior")
+        x, y = procurarLocalizacaoDaImagemPelosEixos("confirmDentroDoJogo")
+        if x != None:
+            pyautogui.click(x, y, duration = durationChoosed())
     elif procurarImagemSemRetornarErro("confirmLose"):
-        while procurarImagemSemRetornarErro("confirmLose"):
-            try:
-                pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("confirmLose"), duration = durationChoosed())
-            except:
-                print("Falhou em encontrar a imagem 'confirmLose', mesmo após ter achado na fase anterior")
-            
+        x, y = procurarLocalizacaoDaImagemPelosEixos("confirmLose")
+        if x != None:
+            pyautogui.click(x, y, duration = durationChoosed()) 
 
-def backToMenu():
+# 100%
+# def confirmMap():
+#     time.sleep(1)
+#     if procurarImagemSemRetornarErro("confirmDentroDoJogo"):
+#         while procurarImagemSemRetornarErro("confirmDentroDoJogo"):
+#             try:
+#                 pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("confirmDentroDoJogo"), duration = durationChoosed())
+#             except:
+#                 print("Falhou em encontrar a imagem 'confirmDentroDojogo', mesmo após ter achado na fase anterior")
+#     elif procurarImagemSemRetornarErro("confirmLose"):
+#         while procurarImagemSemRetornarErro("confirmLose"):
+#             try:
+#                 pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("confirmLose"), duration = durationChoosed())
+#             except:
+#                 print("Falhou em encontrar a imagem 'confirmLose', mesmo após ter achado na fase anterior")
+
+# def backToMenu():   
+#     if procurarImagemSemRetornarErro("ship"):
+#         while procurarImagemSemRetornarErro("ship"):
+#             try:
+#                 pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("confirmDentroDoJogo"), duration = durationChoosed())
+#             except:
+#                 print("Falhou em encontrar a imagem 'confirmDentroDojogo', mesmo após ter achado na fase anterior")
+#         pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("ship"), duration = durationChoosed())
+
+def backToMenu():   
+    contador = 0
     time.sleep(5)
     confirmMap()
-    if procurarImagemSemRetornarErro("ship"):
-        pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("ship"), duration = durationChoosed())
+    while procurarImagemSemRetornarErro("ship") or contador > 30:
+        x, y = procurarLocalizacaoDaImagemPelosEixos("ship")
+        if x != None:
+            pyautogui.click(x, y, duration = durationChoosed())
+        contador+=1
 
 # 100%
 def clickInTheXOfShips():
