@@ -18,6 +18,7 @@ def durationChoosed():
     return 1
 
 def conectarFunc():
+    print('*'+('-' * 25)+'conectarFunc-INICIO'+('-' * 25)+ '*')
     contador = 0
     connect = True
     assinarClick = False
@@ -52,6 +53,7 @@ def conectarFunc():
             playClick = True
             connect = False
         contador += 1
+    print('*'+('-' * 25)+'conectarFunc-FIM'+('-' * 25)+ '*')
 
 def dragInTheMenu1x():
     x, y = procurarLocalizacaoDaImagemPelosEixos("setaDeEscolha")
@@ -84,7 +86,6 @@ def procurarImagemSemRetornarErro(imagem):
 
 def procurarLocalizacaoDaImagemPelosEixos(imagem):
     print('Utiliando a func procurarLocalizacaoDaImagemPelosEixos: ' + imagem)
-    print('*' + '-' * 100 + '*')
     contador = 0
     while contador < 35:
         if procurarImagemSemRetornarErro(imagem):
@@ -100,7 +101,6 @@ def procurarLocalizacaoDaImagemPelosEixos(imagem):
                 print("ERRO - FUNÇÃO: procurarLocalizacaoDaImagemPelosEixos - Nao achei a imagem: "+imagem+' - '+ str(contador))         
         else:
              contador += 1
-    print('*' + '-' * 100 + '*')
     return None, None
 
 
@@ -108,8 +108,7 @@ def procurarLocalizacaoDaImagemPelosEixos(imagem):
 
 # Procura pela região em torno do botão fight se essa nave deve ou não ir batalhar
 def fight():
-    print('*' + '-' * 100 + '*')
-    print('Utiliando a função FIGHT')
+    print('*'+('-' * 25)+'FIGHT-INICIO'+('-' * 25)+ '*')
     loop = True
     contador = 0
     while loop:
@@ -132,18 +131,21 @@ def fight():
             #     print("Erro na func fight, ao procurar imagem: FIGHT")   
         else:
             loop = False
-    print('*' + '-' * 100 + '*')
+    print('*'+('-' * 25)+'FIGHT-FIM'+('-' * 25)+ '*')
     return True
     
 # 100%
 def fightBoss():
+    print('*'+('-' * 25)+'fightBoss-INICIO'+('-' * 25)+ '*')
     time.sleep(2)
     confirmMap()
     if procurarImagemSemRetornarErro("fightBoss"):
         pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("fightBoss"), duration = durationChoosed())
+    print('*'+('-' * 25)+'fightBoss-FIM'+('-' * 25)+ '*')
 
 # 100%
 def confirmMap():
+    print('*'+('-' * 25)+'confirmMap-INICIO'+('-' * 25)+ '*')
     time.sleep(1)
     if procurarImagemSemRetornarErro("confirmDentroDoJogo"):
         x, y = procurarLocalizacaoDaImagemPelosEixos("confirmDentroDoJogo")
@@ -153,6 +155,7 @@ def confirmMap():
         x, y = procurarLocalizacaoDaImagemPelosEixos("confirmLose")
         if x != None:
             pyautogui.click(x, y, duration = durationChoosed()) 
+    print('*'+('-' * 25)+'confirmMap-FIM'+('-' * 25)+ '*')
 
 # 100%
 # def confirmMap():
@@ -180,14 +183,15 @@ def confirmMap():
 #         pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("ship"), duration = durationChoosed())
 
 def backToMenu():   
-    contador = 0
+    print('*'+('-' * 25)+'backToMenu-INICIO'+('-' * 25)+ '*')
     time.sleep(5)
     confirmMap()
-    while procurarImagemSemRetornarErro("ship") or contador > 30:
-        x, y = procurarLocalizacaoDaImagemPelosEixos("ship")
-        if x != None:
-            pyautogui.click(x, y, duration = durationChoosed())
-        contador+=1
+    for i in range(5):
+        if procurarImagemSemRetornarErro("ship"):
+            x, y = procurarLocalizacaoDaImagemPelosEixos("ship")
+            if x != None:
+                pyautogui.click(x, y, duration = durationChoosed())
+    print('*'+('-' * 25)+'backToMenu-FIM'+('-' * 25)+ '*')
 
 # 100%
 def clickInTheXOfShips():
@@ -197,7 +201,6 @@ def clickInTheXOfShips():
 
 # 100%
 def findShipByTheRegion():
-    print('Utiliando a func findShipByTheRegion')
     contador = 0
     time.sleep(3)
     loopSurrender = procurarImagemSemRetornarErro("surrenderInTheGame")
@@ -218,6 +221,7 @@ def findShipByTheRegion():
             timeDeEntrada = datetime.datetime.utcnow()
             timeDeSaida = datetime.datetime.utcnow()
             while loopOfWhile:
+                print('*'+('-' * 10)+'findShipByTheRegion --loopOfWhile--'+('-' * 10)+ '*')
                 for i in range(6):
                     img = pyautogui.locateCenterOnScreen('./assets/xVermelhoEmCimaDaNave.png', confidence=0.9, region=(x-30,(newY+49+variacaoDoY), 56, 60) )
                     newY+= 57  
@@ -237,10 +241,10 @@ def findShipByTheRegion():
                 retorno = []
                 newY = y
                 confirmMap()
+                print('*'+('-' * 10)+'findShipByTheRegion --loopOfWhile--'+('-' * 10)+ '*')
             return True
         except BaseException as err:
             print("Ocorreu um ERRO na função - findShipByTheRegion: " + str(err))
-            
     return False
 
 def clickInTheXOfShipsLoop():
@@ -281,6 +285,8 @@ def start():
         confirmMap()
         findShipByTheRegion()
         backToMenu()
+        if procurarImagemSemRetornarErro("ship"):
+            backToMenu()
     for i in range(600):
         moveRange = round(random.uniform(100,700), 10)
         moveRange2 = round(random.uniform(100,700), 10)

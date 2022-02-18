@@ -86,9 +86,10 @@ def procurarLocalizacaoDaImagemPelosEixos(imagem):
     print('*' + '-' * 100 + '*')
     return None, None
 
-x,y = procurarLocalizacaoDaImagemPelosEixos("confirmDentroDoJogo")
-if x != None:
-    pyautogui.click(x, y, duration = 1)
+pyautogui.moveTo(925, 833)
+# x,y = procurarLocalizacaoDaImagemPelosEixos("confirmDentroDoJogo")
+# if x != None:
+#     pyautogui.click(x, y, duration = 1)
 
 def confirmMap():
     if procurarImagemSemRetornarErro("confirmDentroDoJogo"):
