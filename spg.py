@@ -56,15 +56,18 @@ def conectarFunc():
     print('*'+('-' * 25)+'conectarFunc-FIM'+('-' * 25)+ '*')
 
 def dragInTheMenu1x():
-    x, y = procurarLocalizacaoDaImagemPelosEixos("setaDeEscolha")
-    pyautogui.moveTo(x, y+440)
-    pyautogui.mouseDown(button='left')
-    #BEM MELHOR usar moveTo no lugar de dragTO
-    pyautogui.moveTo(x, y+40, duration=3)
-    # pyautogui.dragTo(x, y+40, duration = 3)
-    time.sleep(4)
-    pyautogui.mouseUp(button='left')
-    time.sleep(2)
+    if not procurarImagemSemRetornarErro("connectWallet") and not procurarImagemSemRetornarErro("close"):
+        x, y = procurarLocalizacaoDaImagemPelosEixos("setaDeEscolha")
+        pyautogui.moveTo(x, y+440)
+        pyautogui.mouseDown(button='left')
+        #BEM MELHOR usar moveTo no lugar de dragTO
+        pyautogui.moveTo(x, y+40, duration=3)
+        # pyautogui.dragTo(x, y+40, duration = 3)
+        time.sleep(4)
+        pyautogui.mouseUp(button='left')
+        time.sleep(2)
+    else:
+        raise Exception("Erro na função dragInTheMenu1x")
 
 def procurarImagemSemRetornarErro(imagem):
     confidence = os.getenv("CONFIDENCE")
@@ -202,6 +205,9 @@ def findShipByTheRegion():
                 for i in retorno:
                     if i == False:
                         loopOfWhile = True
+                    elif procurarImagemSemRetornarErro("allBlack"):
+                        print("Não existe nave na tela! - allBlack")
+                        loopOfWhile = False
                 timeDeSaida = datetime.datetime.utcnow()
                 timeTotal = timeDeSaida - timeDeEntrada
                 if (timeTotal.total_seconds() >= 900):
@@ -234,7 +240,7 @@ def maxAmmo():
     while setaDeEscolha == False:
         time.sleep(1)
         setaDeEscolha = procurarImagemSemRetornarErro("setaDeEscolha")
-        if setaDeEscolha:
+        if setaDeEscolha and not procurarImagemSemRetornarErro("connectWallet") and not procurarImagemSemRetornarErro("close"):
             pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("setaDeEscolha"), duration = durationChoosed())
             time.sleep(2)
             if procurarImagemSemRetornarErro("maxAmmo"):
