@@ -48,6 +48,10 @@ def tratarImagem(imagem):
 
 def procurarImagemSemRetornarErro(imagem):
     confidence = os.getenv("CONFIDENCE")
+    if imagem == "15de15" or imagem == "close":
+        confidence = 0.9
+    if imagem == "connectWallet" or "play":
+        confidence = 0.8
     img = None
     contador = 0
     if (imagem == "metamaskNotification"):
@@ -56,12 +60,10 @@ def procurarImagemSemRetornarErro(imagem):
         img = pyautogui.locateCenterOnScreen('./assets/'+ imagem+'.png', confidence=confidence)
         if img != None:
             print('Achei a imagem: ' + imagem)
-            print(img)
             return True
         contador += 1
         if contador >= 5:
             img = True
-    print('Não consegui encontrar a imagem: ' + imagem)
     return False
 
 def procurarLocalizacaoDaImagemPelosEixos(imagem):
@@ -86,7 +88,7 @@ def procurarLocalizacaoDaImagemPelosEixos(imagem):
     print('*' + '-' * 100 + '*')
     return None, None
 
-pyautogui.moveTo(1118, 738)
+# pyautogui.moveTo(1118, 738)
 # x,y = procurarLocalizacaoDaImagemPelosEixos("confirmDentroDoJogo")
 # if x != None:
 #     pyautogui.click(x, y, duration = 1)
@@ -203,6 +205,6 @@ def confirmMap():
 
 
 #
-# img = pyautogui.locateCenterOnScreen('./assets/0de15DentroDoUniverso.png', confidence=0.9)
-# print(img)
-# pyautogui.click(img)
+img = pyautogui.locateCenterOnScreen('./assets/15de15.png', confidence=0.9)
+print(img)
+pyautogui.click(img)
