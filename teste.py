@@ -48,9 +48,11 @@ def tratarImagem(imagem):
 
 def procurarImagemSemRetornarErro(imagem):
     confidence = os.getenv("CONFIDENCE")
-    if imagem == "15de15" or imagem == "close":
+    if imagem == 'allBlack':
+        confidence = 0.99
+    elif imagem == "15de15" or imagem == "close":
         confidence = 0.9
-    if imagem == "connectWallet" or "play":
+    elif imagem == "connectWallet" or imagem == "play":
         confidence = 0.8
     img = None
     contador = 0
@@ -94,14 +96,15 @@ def procurarLocalizacaoDaImagemPelosEixos(imagem):
 #     pyautogui.click(x, y, duration = 1)
 
 def confirmMap():
-    if procurarImagemSemRetornarErro("confirmDentroDoJogo"):
+    if procurarImagemSemRetornarErro("allblack"):
         pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("confirmDentroDoJogo"), duration = 1)
 
 # print(pyautogui.position())
 
 
 
-
+if procurarImagemSemRetornarErro("allblack"):
+    print("ACHEi")
 
 
 
@@ -205,6 +208,6 @@ def confirmMap():
 
 
 #
-img = pyautogui.locateCenterOnScreen('./assets/15de15.png', confidence=0.9)
+img = pyautogui.locateCenterOnScreen('./assets/allblack.png', confidence=0.95)
 print(img)
-pyautogui.click(img)
+# pyautogui.click(img)

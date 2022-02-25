@@ -72,9 +72,11 @@ def dragInTheMenu1x():
 def procurarImagemSemRetornarErro(imagem):
     confidence = os.getenv("CONFIDENCE")
 
-    if imagem == "15de15" or imagem == "close":
+    if imagem == 'allBlack':
+        confidence = 0.95
+    elif imagem == "15de15" or imagem == "close":
         confidence = 0.9
-    if imagem == "connectWallet" or imagem == "play":
+    elif imagem == "connectWallet" or imagem == "play":
         confidence = 0.8
 
     img = None
@@ -119,6 +121,7 @@ def procurarLocalizacaoDaImagemPelosEixos(imagem):
 def fight():
     loop = True
     contador = 0
+    contadorDeImg = 0
     while loop:
         if procurarImagemSemRetornarErro("close"):
             raise Exception("Erro na função clickInTheXOfShips")
@@ -131,6 +134,10 @@ def fight():
                     if x != None:
                         pyautogui.click(x+160, y+50, duration = durationChoosed())
                         time.sleep(1)
+                    contadorDeImg += 1
+                    if contadorDeImg >= 20 :
+                        dragInTheMenu1x()
+                        contadorDeImg = 0
                 else:
                     dragInTheMenu1x()
                     contador += 1
@@ -188,6 +195,7 @@ def clickInTheXOfShips():
 # 100%
 def findShipByTheRegion():
     contador = 0
+    contadorLoop = 0
     time.sleep(3)
     loopSurrender = procurarImagemSemRetornarErro("surrenderInTheGame")
     while not loopSurrender:
@@ -210,7 +218,7 @@ def findShipByTheRegion():
                 if procurarImagemSemRetornarErro("close"):
                     raise Exception("Erro na função findShipByTheRegion - loopOfWhile")
                 print('*'+('-' * 10)+'findShipByTheRegion --loopOfWhile-- INICIO'+('-' * 10)+ '*')
-                for i in range(6):
+                for i in range(5):
                     img = pyautogui.locateCenterOnScreen('./assets/xVermelhoEmCimaDaNave.png', confidence=0.9, region=(x-30,(newY+49+variacaoDoY), 56, 60) )
                     newY+= 57  
                     if img == None:  
@@ -221,9 +229,13 @@ def findShipByTheRegion():
                 for i in retorno:
                     if i == False:
                         loopOfWhile = True
-                if retorno.count(False) >= 1:
-                    if procurarImagemSemRetornarErro("allBlack"):
-                        print("Não existe nave na tela! - allBlack")
+                if not procurarImagemSemRetornarErro('allBlack'):
+                    loopOfWhile = False
+                elif retorno.count(True) >= 3:
+                    time.sleep(1)
+                    contadorLoop += 1
+                    print("TESTE COUNT TRUE ---------------------------")
+                    if contadorLoop > 50 :
                         loopOfWhile = False
                 timeDeSaida = datetime.datetime.utcnow()
                 timeTotal = timeDeSaida - timeDeEntrada
@@ -279,6 +291,19 @@ def maxAmmo():
                 raise Exception("Erro na função maxAmmo")
             contador += 1
 
+def openTheSPG():
+    time.sleep(15)
+    site_on = os.getenv("SITE_ON")
+    x, y = procurarLocalizacaoDaImagemPelosEixos("metamaskWhitOutNotification")
+    pyautogui.click(x-500, y, duration=15)
+    time.sleep(15)
+    pyautogui.keyDown("ctrl")
+    pyautogui.press("a")
+    pyautogui.keyUp("ctrl")
+    time.sleep(15)
+    pyautogui.write(site_on)
+    pyautogui.press("enter")
+
 def start():
     fightFinish = True
     while fightFinish:
@@ -299,9 +324,13 @@ def start():
         if procurarImagemSemRetornarErro("ship"):
             confirmMap()
             backToMenu()
-    for i in range(7300):
-        x, y = procurarLocalizacaoDaImagemPelosEixos("Space")
-        pyautogui.click(x, y, duration = 2)
+    pyautogui.click(procurarLocalizacaoDaImagemPelosEixos("spaceCrypto"), duration = 2)
+    time.sleep(2)
+    reiniciarAPagina()
+    for i in range(14600):
+        moveRange = round(random.uniform(100,700), 10)
+        moveRange2 = round(random.uniform(100,700), 10)
+        pyautogui.moveTo(moveRange, moveRange2, duration = 1)        
 
 # conectarFuncBool = True
 time.sleep(2)
